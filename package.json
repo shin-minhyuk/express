@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "local": "ts-node-dev --respawn --transpile-only src/server.ts"
+  },
   "dependencies": {
     "@prisma/client": "^6.3.1",
     "express": "^4.21.2"
