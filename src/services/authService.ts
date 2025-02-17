@@ -1,4 +1,5 @@
 import { handleOAuthLogin } from "./userService";
+import jwt from "jsonwebtoken";
 
 interface GoogleTokenResponse {
   access_token: string;
@@ -11,6 +12,11 @@ interface GoogleUserInfo {
   email: string;
   name: string;
   picture?: string;
+}
+
+interface TokenPayload {
+  userId: number;
+  email?: string; // optional field (string | undefined)
 }
 
 export const getGoogleAccessToken = async (
@@ -54,4 +60,21 @@ export const handleGoogleCallback = async (authCode: string) => {
     provider: "GOOGLE",
     socialId: googleUser.id,
   });
+};
+
+// 토큰 생성
+export const generateToken = (payload: TokenPayload) => {
+  return jwt.sign(payload, process.env.JWT_SECRET!, {
+    expiresIn: "1d", // 토큰 만료 시간
+  });
+};
+
+// 토큰 검증
+export const verifyToken = async (token: string): Promise<TokenPayload> => {
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as TokenPayload;
+    return decoded;
+  } catch (error) {
+    throw new Error("Invalid token");
+  }
 };

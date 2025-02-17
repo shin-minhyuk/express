@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { handleGoogleCallback } from "../services/authService";
+import { handleGoogleCallback, generateToken } from "../services/authService";
 
 export const googleAuthCallback: RequestHandler = async (req, res) => {
   try {
@@ -11,7 +11,14 @@ export const googleAuthCallback: RequestHandler = async (req, res) => {
     }
 
     const user = await handleGoogleCallback(code);
-    res.json({ user });
+
+    // JWT 토큰 생성
+    const token = generateToken({
+      userId: user.id,
+      email: user.loginProvider?.email ?? undefined,
+    });
+
+    res.json({ user, token });
   } catch (error) {
     console.error("Google OAuth Error:", error);
     res.status(500).json({ error: "Authentication failed" });
