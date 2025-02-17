@@ -5,7 +5,7 @@ const router = Router();
 
 /**
  * @swagger
- * /posts:
+ * /post:
  *   post:
  *     summary: Create a new post
  *     tags: [Post]

@@ -5,18 +5,18 @@ const router = Router();
 
 /**
  * @swagger
- * /users:
+ * /user:
  *   get:
  *     summary: Get all users
- *     tags: [Users]
+ *     tags: [User]
  *     responses:
  *       200:
  *         description: A list of users
  *
- * /users/:id:
+ * /user/:id:
  *   get:
  *     summary: Get a user by ID
- *     tags: [Users]
+ *     tags: [User]
  *     parameters:
  *       - in: path
  */
