@@ -34,8 +34,11 @@ model LoginProvider {
   id        Int       @id @default(autoincrement())
   user      User      @relation(fields: [userId], references: [id])
   userId    Int       @unique
-  email     String    // 애플은 최초 1회 정보 제공, deletedAt 이후 삭제된 이메일 사용 가능하도록 하기 위해 @unique 사용 안함
+  email     String?   // email을 nullable로 변경
+  socialId  String    // OAuth 제공자의 고유 ID
   loginType LoginType @default(EMAIL)
+
+  @@unique([loginType, socialId])  // provider + socialId 조합으로 유니크 제약
 }
 
 model Post {
