@@ -18,7 +18,7 @@ export const createNewPost: RequestHandler = async (req, res) => {
     const post = await createPost({
       title,
       content,
-      authorId: userId,
+      userId,
     });
 
     res.json(post);

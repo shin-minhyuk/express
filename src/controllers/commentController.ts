@@ -25,7 +25,7 @@ export const createNewComment: RequestHandler = async (req, res) => {
     const comment = await createComment({
       content,
       postId,
-      authorId: userId,
+      userId,
       parentId: parentId ? Number(parentId) : undefined,
     });
 

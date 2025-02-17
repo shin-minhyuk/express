@@ -20,20 +20,20 @@ enum LoginType {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  name      String
-  posts     Post[]    // 사용자가 작성한 게시글들
-  comments  Comment[] // 사용자가 작성한 댓글들
+  id            Int             @id @default(autoincrement())
+  name          String
   loginProvider LoginProvider?
-  deletedAt DateTime?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  posts         Post[]         // userId로 연결
+  comments      Comment[]      // userId로 연결
+  deletedAt     DateTime?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 }
 
 model LoginProvider {
   id        Int       @id @default(autoincrement())
-  user      User      @relation(fields: [userId], references: [id])
   userId    Int       @unique
+  user      User      @relation(fields: [userId], references: [id])
   email     String?   // email을 nullable로 변경
   socialId  String    // OAuth 제공자의 고유 ID
   loginType LoginType @default(EMAIL)
@@ -45,8 +45,8 @@ model Post {
   id        Int       @id @default(autoincrement())
   title     String
   content   String
-  author    User      @relation(fields: [authorId], references: [id])
-  authorId  Int
+  userId    Int      // authorId 대신 userId
+  user      User      @relation(fields: [userId], references: [id])
   comments  Comment[] // 게시글에 달린 댓글들
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -55,10 +55,10 @@ model Post {
 model Comment {
   id        Int       @id @default(autoincrement())
   content   String
-  post      Post      @relation(fields: [postId], references: [id])
   postId    Int
-  author    User      @relation(fields: [authorId], references: [id])
-  authorId  Int
+  post      Post      @relation(fields: [postId], references: [id])
+  userId    Int      // authorId 대신 userId
+  user      User      @relation(fields: [userId], references: [id])
   
   // 대댓글 관련 필드 추가
   parent    Comment?  @relation("CommentToComment", fields: [parentId], references: [id])
