@@ -50,12 +50,18 @@ model Post {
 }
 
 model Comment {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   content   String
-  post      Post     @relation(fields: [postId], references: [id])
+  post      Post      @relation(fields: [postId], references: [id])
   postId    Int
-  author    User     @relation(fields: [authorId], references: [id])
+  author    User      @relation(fields: [authorId], references: [id])
   authorId  Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  
+  // 대댓글 관련 필드 추가
+  parent    Comment?  @relation("CommentToComment", fields: [parentId], references: [id])
+  parentId  Int?
+  replies   Comment[] @relation("CommentToComment")
+  
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
