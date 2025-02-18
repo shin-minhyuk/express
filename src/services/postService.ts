@@ -3,19 +3,19 @@ import prisma from "../prisma";
 interface CreatePostData {
   title: string;
   content: string;
-  authorId: number;
+  userId: number;
 }
 
 export const createPost = async ({
   title,
   content,
-  authorId,
+  userId,
 }: CreatePostData) => {
   return await prisma.post.create({
     data: {
       title,
       content,
-      authorId,
+      userId,
     },
   });
 };

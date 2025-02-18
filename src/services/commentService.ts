@@ -3,12 +3,12 @@ import prisma from "../prisma";
 interface CreateCommentData {
   content: string;
   postId: number;
-  authorId: number;
+  userId: number;
   parentId?: number; // 대댓글인 경우 부모 댓글 ID
 }
 
 const createComment = async (comment: CreateCommentData) => {
-  const { content, postId, authorId, parentId } = comment;
+  const { content, postId, userId, parentId } = comment;
 
   // 게시글이 존재하는지 먼저 확인
   const post = await prisma.post.findUnique({
@@ -40,11 +40,11 @@ const createComment = async (comment: CreateCommentData) => {
     data: {
       content,
       postId,
-      authorId,
+      userId,
       parentId, // undefined면 일반 댓글, 값이 있으면 대댓글
     },
     include: {
-      author: {
+      user: {
         select: {
           id: true,
           name: true,
